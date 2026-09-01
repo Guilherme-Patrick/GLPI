@@ -25,13 +25,12 @@ Antes de instalar o agente, verificar se a máquina Linux consegue acessar o ser
 Executar:
 
 ```bash
-ping IP_DO_SERVIDOR_GLPI
+ping glpi.in.iti.br
 ```
-
-Também pode ser realizado um teste de acesso ao servidor:
+Ou:
 
 ```bash
-curl -I http://IP_DO_SERVIDOR_GLPI/
+ping 192.168.16.52
 ```
 
 ---
@@ -41,7 +40,7 @@ curl -I http://IP_DO_SERVIDOR_GLPI/
 Baixar o instalador do agente:
 
 ```bash
-wget -O glpi-agent-linux-installer.pl https://github.com/glpi-project/glpi-agent/releases/latest/download/glpi-agent-linux-installer.pl
+wget -O glpi-agent-installer.pl https://github.com/glpi-project/glpi-agent/releases/download/1.19/glpi-agent-1.19-linux-installer.pl && sudo perl glpi-agent-installer.pl --server="https://glpi.in.iti.br/" --tag="CGISE" --no-ssl-check --runnow
 ```
 
 ---
@@ -79,14 +78,11 @@ sudo vim /etc/glpi-agent/agent.cfg
 Adicionar o endereço do servidor GLPI:
 
 ```text
-server = http://IP_DO_SERVIDOR_GLPI/front/inventory.php
+server = https://glpi.in.iti.br/
+tag = CGISE
+no-ssl-check = 1
 ```
 
-Exemplo:
-
-```text
-server =  https://glpi.in.iti.br
-```
 
 Após realizar a alteração, salvar o arquivo.
 
@@ -126,47 +122,6 @@ Após a execução, verificar se não foram apresentados erros.
 
 ---
 
-###  7. Verificar o computador no GLPI
-
-Após executar o inventário:
-
-- Acessar o servidor GLPI.
-- Ir em **Ativos**.
-- Acessar **Computadores**.
-- Procurar pelo nome da máquina Linux.
-
-A máquina deverá aparecer com as informações coletadas pelo agente.
-
----
-
-##  Caso o computador não apareça
-
-Verificar o status do serviço:
-
-```bash
-systemctl status glpi-agent
-```
-
-Verificar os logs:
-
-```bash
-journalctl -u glpi-agent
-```
-
-Executar novamente o inventário em modo de depuração:
-
-```bash
-sudo glpi-agent --debug --logger=stderr --force
-```
-
-Verificar também se a máquina consegue acessar o servidor GLPI:
-
-```bash
-curl -I http://IP_DO_SERVIDOR_GLPI/
-```
-
----
-
 ## Validação
 
 Após finalizar, verificar:
@@ -175,4 +130,3 @@ Após finalizar, verificar:
 - [ ] Servidor GLPI configurado no `agent.cfg`
 - [ ] Serviço do GLPI Agent funcionando
 - [ ] Inventário executado
-- [ ] Máquina Linux aparecendo no GLPI
